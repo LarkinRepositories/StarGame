@@ -9,6 +9,9 @@ import com.badlogic.gdx.math.Vector2;
 import ru.larkinds.base.BaseScreen;
 
 public class MenuScreen extends BaseScreen {
+
+    private static final float VELOCITY_LENGTH = 0.5f;
+
     private Texture img;
     private Vector2 position;
     private Vector2 velocity;
@@ -35,6 +38,7 @@ public class MenuScreen extends BaseScreen {
 		batch.end();
         controlWithKeyBoard();
         controlWithMouse();
+//        position.add(velocity);
     }
 
     @Override
@@ -68,7 +72,8 @@ public class MenuScreen extends BaseScreen {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         destination.set(screenX, Gdx.graphics.getHeight() - screenY);
-        velocity.set(destination.sub(position));
+//        velocity.set(destination.sub(position));
+        velocity.set(destination.cpy().sub(position)).setLength(VELOCITY_LENGTH);
         return super.touchDown(screenX, screenY, pointer, button);
 
     }
@@ -89,14 +94,11 @@ public class MenuScreen extends BaseScreen {
     }
 
     private void controlWithMouse() {
-        if ((Gdx.graphics.getHeight() > destination.y + img.getHeight()
-                || Gdx.graphics.getHeight() > position.y - img.getHeight() && position.y > 0)
-                || (Gdx.graphics.getWidth() > destination.x + img.getWidth()
-                || Gdx.graphics.getWidth() > position.x - img.getWidth()) && position.x > 0) {
-            position.add(velocity.x/60, velocity.y/60);
+        Vector2 buffer = new Vector2().set(destination);
+        if ((buffer.sub(position)).len() > VELOCITY_LENGTH) {
+            position.add(velocity);
+        } else {
+            position.set(destination);
         }
-//        if (position.x + img.getWidth() < destination.x + img.getWidth() || position.y + img.getHeight() < destination.y + img.getHeight()) {
-//            position.add(velocity.x/60, velocity.y/60);
-//        }
     }
 }
