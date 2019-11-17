@@ -5,4 +5,5 @@ public interface Controlable {
     public void controlWithMouse();
     public void controlWithKeyBoard();
 
+
 }

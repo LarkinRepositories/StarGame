@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import javax.xml.soap.Text;
 
 import ru.larkinds.base.BaseScreen;
 import ru.larkinds.math.Rectangle;
@@ -33,13 +32,10 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public void render(float delta) {
+        update(delta);
+        draw();
         super.render(delta);
-        Gdx.gl.glClearColor(1, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-        background.draw(batch);
-        logo.draw(batch);
-		batch.end();
+
     }
 
     @Override
@@ -85,6 +81,21 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(Vector2 destination, int pointer) {
+        logo.touchDown(destination, pointer);
         return false;
+    }
+
+    private void update(float deltaTime) {
+        logo.update(deltaTime);
+
+    }
+
+    private void draw() {
+        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.begin();
+        background.draw(batch);
+        logo.draw(batch);
+        batch.end();
     }
 }
