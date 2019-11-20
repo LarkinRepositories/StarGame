@@ -40,8 +40,8 @@ public class Sprite extends Rectangle {
     }
 
     public void resize(Rectangle worldBounds) {
-
     }
+
 
     public boolean touchDown(Vector2 destination, int pointer) {
         return  false;

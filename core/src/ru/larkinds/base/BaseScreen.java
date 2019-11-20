@@ -126,6 +126,11 @@ public class BaseScreen implements Screen, InputProcessor {
         return false;
     }
 
+
+    public boolean touchUp(Vector2 destination, int pointer) {
+        return false;
+    }
+
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         //System.out.printf("touchDragged event, screenX = %s, screenY = %s, pointer = %s, button = %s", screenX, screenY, pointer);

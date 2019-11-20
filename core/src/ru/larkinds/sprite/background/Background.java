@@ -1,4 +1,4 @@
-package ru.larkinds.sprite;
+package ru.larkinds.sprite.background;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
