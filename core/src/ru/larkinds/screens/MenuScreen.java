@@ -1,49 +1,47 @@
 package ru.larkinds.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+
 import ru.larkinds.base.BaseScreen;
+import ru.larkinds.math.Rectangle;
+import ru.larkinds.sprite.Background;
+import ru.larkinds.sprite.Logo;
 
 public class MenuScreen extends BaseScreen {
 
     private static final float VELOCITY_LENGTH = 0.5f;
-
     private Texture img;
-    private Vector2 position;
-    private Vector2 velocity;
-    private Vector2 destination;
+    private Texture bg;
+    private Background background;
+    private Logo logo;
 
     @Override
     public void show() {
         super.show();
         img = new Texture("badlogic.jpg");
-        position = new Vector2();
-        velocity = new Vector2();
-        destination = new Vector2();
+        bg = new Texture("textures/bg.png");
+        logo = new Logo(new TextureRegion(img));
+        logo.setHeightProportion(0.5f);
+        background = new Background(new TextureRegion(bg));
     }
 
     @Override
     public void render(float delta) {
+        update(delta);
+        draw();
         super.render(delta);
-        Gdx.gl.glClearColor(1, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		//batch.draw(img, 0, 0, 2048, 2048);
-        batch.draw(img, position.x,position.y);
-		//batch.draw(region, 50 , 50 , 1024, 1024);
-		batch.end();
-        controlWithKeyBoard();
-        controlWithMouse();
-//        position.add(velocity);
+
     }
 
     @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
+    public void resize(Rectangle worldBounds) {
+        super.resize(worldBounds);
+        background.resize(worldBounds);
     }
 
     @Override
@@ -65,40 +63,39 @@ public class MenuScreen extends BaseScreen {
     public void dispose() {
         batch.dispose();
         img.dispose();
+        bg.dispose();
         super.dispose();
 
     }
 
+
+
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        destination.set(screenX, Gdx.graphics.getHeight() - screenY);
+//        destination.set(screenX, Gdx.graphics.getHeight() - screenY);
 //        velocity.set(destination.sub(position));
-        velocity.set(destination.cpy().sub(position)).setLength(VELOCITY_LENGTH);
+//        velocity.set(destination.cpy().sub(position)).setLength(VELOCITY_LENGTH);
         return super.touchDown(screenX, screenY, pointer, button);
 
     }
 
-    private void controlWithKeyBoard() {
-        if (Gdx.input.isKeyPressed(19) && Gdx.graphics.getHeight() > position.y + img.getHeight()) {
-            position.add(0,1);
-        }
-        if (Gdx.input.isKeyPressed(20) && position.y > 0) {
-            position.add(0,-1);
-        }
-        if (Gdx.input.isKeyPressed(21) && position.x > 0) {
-            position.add(-1,0);
-        }
-        if (Gdx.input.isKeyPressed(22) && Gdx.graphics.getWidth() > position.x + img.getWidth()) {
-            position.add(1,0);
-        }
+    @Override
+    public boolean touchDown(Vector2 destination, int pointer) {
+        logo.touchDown(destination, pointer);
+        return false;
     }
 
-    private void controlWithMouse() {
-        Vector2 buffer = new Vector2().set(destination);
-        if ((buffer.sub(position)).len() > VELOCITY_LENGTH) {
-            position.add(velocity);
-        } else {
-            position.set(destination);
-        }
+    private void update(float deltaTime) {
+        logo.update(deltaTime);
+
+    }
+
+    private void draw() {
+        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.begin();
+        background.draw(batch);
+        logo.draw(batch);
+        batch.end();
     }
 }
